@@ -1,0 +1,79 @@
+project: ldm
+name: ddpm
+
+jittor:
+  use_cuda: true
+  amp_level: 0 #TODO: support amp
+  seed: 66
+
+lr: 0.00001
+resume: null
+start_epoch: 0
+epochs: 50
+print_freq: 10 # print and log every i iteration (batch)
+save_dir: null
+save_freq: 2 # save ckpt # save last and best
+save_wandb_image_freq: 50
+sample_freq: 1
+
+model:
+  beta_schedule: linear # use cosine
+  timesteps: 1000 
+  linear_start: 0.0015
+  linear_end: 0.0205
+  loss_type: l1
+  log_every_t: 100
+  image_size: 64 
+  channels: 3 
+  use_ema: false ###
+  # ckpt_path: null ###
+  ckpt_path: /nas/wang/champ/save/run-20220713_043806-1i0hl4bo/checkpoints/last.ckpt
+  clip_denoised: false
+  unet_config: 
+    image_size: 64 
+    in_channels: 6
+    out_channels: 3
+    model_channels: 128
+    attention_resolutions:
+    - 32
+    - 16
+    - 8
+    num_res_blocks: 2
+    channel_mult:
+    - 1
+    - 4
+    - 8
+    num_heads: 8
+  first_stage_config:
+    embed_dim: 3
+    n_embed: 4096 ###
+    ckpt_path: null #/nas/wang/champ/save/run-20220712_124707-2juo0be2/checkpoints/epoch_60.ckpt
+    ddconfig:
+      double_z: false
+      z_channels: 3
+      resolution: 256
+      in_channels: 3
+      out_ch: 3
+      ch: 64
+      ch_mult:
+      - 1
+      - 2
+      - 4
+      num_res_blocks: 2
+      attn_resolutions: []
+      dropout: 0.0
+  cond_stage_config:
+    n_stages: 2
+    in_channels: 29
+    out_channels: 3
+
+data:
+  image_root: '/nas/landscape/train_val/images'
+  segmentation_root: '/nas/landscape/train_val/labels'
+  train_val_split_ratio: 0.99
+  train_val_split_seed: 42
+  batch_size: 12
+  num_workers: 4
+  n_labels: 29
+  image_size: [256, 256] # [height, width]
+  crop_ratio: 1.5

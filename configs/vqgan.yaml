@@ -1,0 +1,50 @@
+project: vqgan
+name: 'test_gan'
+resume: null
+start_epoch: 0
+seed: 42
+epochs: 150
+lr: 0.00005
+print_freq: 10 # print every i interation (batch)
+save_dir: null
+save_freq: 2 # save ckpt
+save_wandb_image_freq: 50
+amp: true # 似乎没啥用，没仔细测
+model:
+  embed_dim: 3
+  n_embed: 4096
+  ckpt_path: /nas/wang/champ/save/run-20220712_113903-23ga69ye/checkpoints/epoch_60.ckpt
+  ddconfig:
+    double_z: false
+    z_channels: 3
+    resolution: 256
+    in_channels: 3
+    out_ch: 3
+    ch: 64
+    ch_mult:
+    - 1
+    - 2
+    - 4
+    num_res_blocks: 2
+    attn_resolutions: []
+    dropout: 0.0
+disc:
+  n_layers: 3
+  input_nc: 3
+  ndf: 64
+loss:
+  disc_weight: 1.0
+  codebook_weight: 1.0
+  perceptual_weight: 2.0
+  gen_weight: 0.75
+  disc_loss: "hinge"
+  gan_start: 4
+
+data:
+  image_root: '/nas/landscape/train_val/images'
+  train_val_split_ratio: 0.95 # NOTE
+  train_val_split_seed: 42
+  batch_size: 8 # 3 for 12G; 6 for 24G
+  num_workers: 2 
+  image_size: 256
+  crop_ratio: 1.4 

@@ -1,0 +1,54 @@
+model:
+  beta_schedule: linear 
+  timesteps: 1000 
+  linear_start: 0.0015
+  linear_end: 0.0205
+  loss_type: l1
+  log_every_t: 100
+  image_size: 64 
+  channels: 3 
+  use_ema: true 
+  # ckpt_path: /nas/wang/champ/save/run-20220711_160008-o33q1z33/checkpoints/last.ckpt
+  # ckpt_path: /nas/wang/champ/save/run-20220712_085528-k6iu45mv/checkpoints/last.ckpt
+  # ckpt_path: /nas/wang/champ/save/run-20220711_161509-2aq0veed/checkpoints/last.ckpt
+  # ckpt_path: /nas/wang/champ/save/run-20220711_080142-suctjzla/checkpoints/last.ckpt
+  # ckpt_path: /nas/wang/champ/save/run-20220714_024402-hvzejjup/checkpoints/last.ckpt
+  ckpt_path: /nas/wang/champ/save/run-20220713_043806-1i0hl4bo/checkpoints/last.ckpt
+  clip_denoised: true
+  unet_config: #
+    image_size: 64 
+    in_channels: 6
+    out_channels: 3
+    model_channels: 128
+    attention_resolutions:
+    - 32
+    - 16
+    - 8
+    num_res_blocks: 2
+    channel_mult:
+    - 1
+    - 4
+    - 8
+    num_heads: 8
+  first_stage_config:
+    embed_dim: 3
+    n_embed: 4096
+    ckpt_path: null
+    ddconfig:
+      double_z: false
+      z_channels: 3
+      resolution: 256
+      in_channels: 3
+      out_ch: 3
+      ch: 64
+      ch_mult:
+      - 1
+      - 2
+      - 4
+      num_res_blocks: 2
+      attn_resolutions: []
+      dropout: 0.0
+  cond_stage_config:
+    n_stages: 2
+    in_channels: 29
+    out_channels: 3
